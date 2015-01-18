@@ -1,0 +1,479 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0A7D6E66-F6FA-4676-8667-AB2409528B18}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LibraryDesign_frontEndUI</RootNamespace>
+    <AssemblyName>LibraryDesign_frontEndUI</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>unnamed.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ASPSnippets.SmsAPI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DLLs\ASPSnippets.SmsAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="LibraryDesign_frontEndUI, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>P:\LibraryDesign_frontEndUI.exe</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.ConnectionInfo, Version=10.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DLLs\Microsoft.SqlServer.ConnectionInfo.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Management.Sdk.Sfc, Version=10.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DLLs\Microsoft.SqlServer.Management.Sdk.Sfc.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Smo, Version=10.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DLLs\Microsoft.SqlServer.Smo.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.SmoExtended, Version=10.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DLLs\Microsoft.SqlServer.SmoExtended.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.SqlEnum, Version=10.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DLLs\Microsoft.SqlServer.SqlEnum.dll</HintPath>
+    </Reference>
+    <Reference Include="SmsClient, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DLLs\SmsClient.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Speech" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BLSSchema.cs">
+      <DependentUpon>BLSSchema.xsd</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="BLSSchema1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BLSSchema.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="BusinessLogic.cs" />
+    <Compile Include="ChooseStockItem.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChooseStockItem.Designer.cs">
+      <DependentUpon>ChooseStockItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmAddStock.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmAddStock.Designer.cs">
+      <DependentUpon>frmAddStock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmCustAmount.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmCustAmount.Designer.cs">
+      <DependentUpon>frmCustAmount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmEditBooksBorrowed.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmEditBooksBorrowed.Designer.cs">
+      <DependentUpon>frmEditBooksBorrowed.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmeditCustomerDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmeditCustomerDetails.Designer.cs">
+      <DependentUpon>frmeditCustomerDetails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmEditStock.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmEditStock.Designer.cs">
+      <DependentUpon>frmEditStock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmMultiIssue.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmMultiIssue.Designer.cs">
+      <DependentUpon>frmMultiIssue.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmReturnDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmReturnDetails.Designer.cs">
+      <DependentUpon>frmReturnDetails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmReturnPreviewOther.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmReturnPreviewOther.Designer.cs">
+      <DependentUpon>frmReturnPreviewOther.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmReturnPreviews.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmReturnPreviews.Designer.cs">
+      <DependentUpon>frmReturnPreviews.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmStockSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmStockSearch.Designer.cs">
+      <DependentUpon>frmStockSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmStudentRegister2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmStudentRegister2.Designer.cs">
+      <DependentUpon>frmStudentRegister2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\LibMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\LibMain.Designer.cs">
+      <DependentUpon>LibMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmAmount.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmAmount.Designer.cs">
+      <DependentUpon>frmAmount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmBuy.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmBuy.Designer.cs">
+      <DependentUpon>frmBuy.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmCustomerSearch.cs">
+      <SubType>Form</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Forms\frmCustomerSearch.Designer.cs">
+      <DependentUpon>frmCustomerSearch.cs</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Forms\frmIssue.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmIssue.Designer.cs">
+      <DependentUpon>frmIssue.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmIssuePreview.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmIssuePreview.Designer.cs">
+      <DependentUpon>frmIssuePreview.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmPlaceOrder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmPlaceOrder.Designer.cs">
+      <DependentUpon>frmPlaceOrder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmRegisterCustomer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmRegisterCustomer.Designer.cs">
+      <DependentUpon>frmRegisterCustomer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmReturn.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmReturn.Designer.cs">
+      <DependentUpon>frmReturn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmSearchOrders.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmSearchOrders.Designer.cs">
+      <DependentUpon>frmSearchOrders.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmSell.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmSell.Designer.cs">
+      <DependentUpon>frmSell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmSellStockSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmSellStockSearch.Designer.cs">
+      <DependentUpon>frmSellStockSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmTransactionReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmTransactionReport.Designer.cs">
+      <DependentUpon>frmTransactionReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ViewCustomerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ViewCustomerForm.Designer.cs">
+      <DependentUpon>ViewCustomerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Library\DBBackup.cs" />
+    <Compile Include="Library\DbBackUpHelper.cs" />
+    <Compile Include="Library\DBRestoreHelper.cs" />
+    <Compile Include="Library\Utility.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="ChooseStockItem.resx">
+      <DependentUpon>ChooseStockItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmAddStock.resx">
+      <DependentUpon>frmAddStock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmCustAmount.resx">
+      <DependentUpon>frmCustAmount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmEditBooksBorrowed.resx">
+      <DependentUpon>frmEditBooksBorrowed.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmeditCustomerDetails.resx">
+      <DependentUpon>frmeditCustomerDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmEditStock.resx">
+      <DependentUpon>frmEditStock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmMultiIssue.resx">
+      <DependentUpon>frmMultiIssue.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmReturnDetails.resx">
+      <DependentUpon>frmReturnDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmReturnPreviewOther.resx">
+      <DependentUpon>frmReturnPreviewOther.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmReturnPreviews.resx">
+      <DependentUpon>frmReturnPreviews.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmStockSearch.resx">
+      <DependentUpon>frmStockSearch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmStudentRegister2.resx">
+      <DependentUpon>frmStudentRegister2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\LibMain.resx">
+      <DependentUpon>LibMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmAmount.resx">
+      <DependentUpon>frmAmount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmBuy.resx">
+      <DependentUpon>frmBuy.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmCustomerSearch.resx">
+      <DependentUpon>frmCustomerSearch.cs</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmIssue.resx">
+      <DependentUpon>frmIssue.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmIssuePreview.resx">
+      <DependentUpon>frmIssuePreview.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmPlaceOrder.resx">
+      <DependentUpon>frmPlaceOrder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmRegisterCustomer.resx">
+      <DependentUpon>frmRegisterCustomer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmReturn.resx">
+      <DependentUpon>frmReturn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmSearchOrders.resx">
+      <DependentUpon>frmSearchOrders.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmSell.resx">
+      <DependentUpon>frmSell.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmSellStockSearch.resx">
+      <DependentUpon>frmSellStockSearch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmTransactionReport.resx">
+      <DependentUpon>frmTransactionReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ViewCustomerForm.resx">
+      <DependentUpon>ViewCustomerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="BLSFullPackage\BLS-Release\LibraryDesign_frontEndUI.exe.config" />
+    <None Include="BLSFullPackage\BLS-Release\LibraryDesign_frontEndUI.vshost.exe.config" />
+    <None Include="BLSFullPackage\BLS-Release\LibraryDesign_frontEndUI.vshost.exe.manifest" />
+    <None Include="BLSFullPackage\Initial BackUp\20141207" />
+    <None Include="BLSSchema.xsc">
+      <DependentUpon>BLSSchema.xsd</DependentUpon>
+    </None>
+    <None Include="BLSSchema.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>BLSSchema1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="BLSSchema.xss">
+      <DependentUpon>BLSSchema.xsd</DependentUpon>
+    </None>
+    <None Include="Forms\App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\DataSources\BLSSchema.ctCustomerDataTable.datasource" />
+    <None Include="Properties\DataSources\BLSSchema.ctCustomerDataTable1.datasource" />
+    <None Include="Properties\DataSources\BLSSchema.ctCustomerDetailsDataTable.datasource" />
+    <None Include="Properties\DataSources\BLSSchema.ctIssueBookListDataTable.datasource" />
+    <None Include="Properties\DataSources\BLSSchema.ctIssueDataTable.datasource" />
+    <None Include="Properties\DataSources\BLSSchema.ctIssueDataTable1.datasource" />
+    <None Include="Properties\DataSources\BLSSchema.ctIssueRow.datasource" />
+    <None Include="Properties\DataSources\BLSSchema.ctReturnDataTable.datasource" />
+    <None Include="Properties\DataSources\BLSSchema.ctStockDataTable.datasource" />
+    <None Include="Properties\DataSources\BLSSchema.ctStockDataTable1.datasource" />
+    <None Include="Properties\DataSources\BLSSchema.ctStockSearchDataTable.datasource" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="TestCases\BLS TestCases.xlsx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="BLSFullPackage\BLS-Release\ASPSnippets.SmsAPI.dll" />
+    <Content Include="BLSFullPackage\BLS-Release\LibraryDesign_frontEndUI.exe" />
+    <Content Include="BLSFullPackage\BLS-Release\LibraryDesign_frontEndUI.pdb" />
+    <Content Include="BLSFullPackage\BLS-Release\LibraryDesign_frontEndUI.vshost.exe" />
+    <Content Include="BLSFullPackage\BLS-Release\SmsClient.dll" />
+    <Content Include="BLSFullPackage\DBScript\BLSFullScript.sql" />
+    <Content Include="DBScripts\BLSFull.Sql" />
+    <Content Include="DLLs\ASPSnippets.SmsAPI.dll" />
+    <Content Include="DLLs\Microsoft.SqlServer.ConnectionInfo.dll" />
+    <Content Include="DLLs\Microsoft.SqlServer.Management.Sdk.Sfc.dll" />
+    <Content Include="DLLs\Microsoft.SqlServer.Smo.dll" />
+    <Content Include="DLLs\Microsoft.SqlServer.SmoExtended.dll" />
+    <Content Include="DLLs\Microsoft.SqlServer.SqlEnum.dll" />
+    <Content Include="DLLs\SmsClient.dll" />
+    <Content Include="Resources\009 - Copy.png" />
+    <Content Include="Resources\009 - Copy1.png" />
+    <Content Include="Resources\009 - Copy2.png" />
+    <Content Include="Resources\009 - Copy3.png" />
+    <Content Include="Resources\009.png" />
+    <Content Include="Resources\12693471124N0YX6.jpg" />
+    <Content Include="Resources\blue.jpg" />
+    <Content Include="Resources\Close_Box_Red.png" />
+    <Content Include="Resources\download.jpg" />
+    <Content Include="Resources\download1.jpg" />
+    <Content Include="Resources\dropDown.png" />
+    <Content Include="Resources\glass-01.jpg" />
+    <Content Include="Resources\glosy_btn01.png" />
+    <Content Include="Resources\images %281%29.jpg" />
+    <Content Include="Resources\images - Copy.jpg" />
+    <Content Include="Resources\register.jpg" />
+    <Content Include="Resources\reports-dashboards.jpg" />
+    <Content Include="Resources\reports.jpg" />
+    <Content Include="Resources\return-library-books1.jpg" />
+    <Content Include="Resources\unnamed.png" />
+    <Content Include="unnamed.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 Client Profile %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.4.5">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 4.5</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
