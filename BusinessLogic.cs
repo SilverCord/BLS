@@ -490,11 +490,14 @@ namespace LibraryDesign_frontEndUI
 
         internal string GetReceiptNumber()
         {
-            try
+            if (_sqlConnection.State == ConnectionState.Closed)
             {
                 _sqlConnection.Open();
+            }
+            try
+            {
                 SqlCommand cmd = new SqlCommand("up_usr_select_ReceiptNumber", _sqlConnection);
-                cmd.CommandType = CommandType.StoredProcedure;           
+                cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add("@ReceiptNumber", SqlDbType.VarChar, 10);
                 cmd.Parameters["@ReceiptNumber"].Direction = ParameterDirection.Output;
                 cmd.ExecuteNonQuery();
@@ -508,10 +511,10 @@ namespace LibraryDesign_frontEndUI
                 }
                 else
                 {
-                    int intNumber =int.Parse(strRecieptNumber.Substring(5, 5));
+                    int intNumber = int.Parse(strRecieptNumber.Substring(5, 5));
                     intNumber++;
 
-                    strNewNumber = strRecieptNumber.Substring(0, 5) + intNumber.ToString().PadLeft(5,'0');
+                    strNewNumber = strRecieptNumber.Substring(0, 5) + intNumber.ToString().PadLeft(5, '0');
 
                 }
 
@@ -520,6 +523,13 @@ namespace LibraryDesign_frontEndUI
             catch (Exception ex)
             {
                 throw new ApplicationException("Error occured while getting new customer ID.\nError  :" + ex);
+            }
+            finally
+            {
+                if (_sqlConnection.State == ConnectionState.Open)
+                {
+                    _sqlConnection.Close();
+                }
             }
         }
 
@@ -1046,36 +1056,108 @@ namespace LibraryDesign_frontEndUI
         internal bool PerformRegularIssueProcess(float fltAdvanceAmount, float fltBalanceAmount,
             float fltLimitUsed, DataTable dtTransactionHiustory, DataTable dtIssue)
         {
-            _sqlConnection.Open();
-            SqlCommand cmd = new SqlCommand("up_usr_Execute_Regular_Issue", _sqlConnection);
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Add("@CustomerID", SqlDbType.VarChar).Value = dtTransactionHiustory.Rows[0]["CustomerID"];
-            cmd.Parameters.Add("@Title", SqlDbType.VarChar).Value = dtTransactionHiustory.Rows[0]["Title"];
-            cmd.Parameters.Add("@Author", SqlDbType.VarChar).Value = dtTransactionHiustory.Rows[0]["Author"];
-            cmd.Parameters.Add("@Edition", SqlDbType.VarChar).Value = dtTransactionHiustory.Rows[0]["Edition"];
-            cmd.Parameters.Add("@Publisher", SqlDbType.VarChar).Value = dtTransactionHiustory.Rows[0]["Publisher"];
-            cmd.Parameters.Add("@price", SqlDbType.Float).Value = float.Parse(dtIssue.Rows[0]["BookPrice"].ToString());           
-            cmd.Parameters.Add("@BookCount", SqlDbType.Int).Value = 1;
-            cmd.Parameters.Add("@issueDate", SqlDbType.DateTime).Value = dtTransactionHiustory.Rows[0]["IssueDate"]; ;
-            cmd.Parameters.Add("@AdvanceAmount", SqlDbType.Float).Value = fltAdvanceAmount;
-            cmd.Parameters.Add("@BalanceAmount", SqlDbType.Float).Value = fltBalanceAmount;
-            cmd.Parameters.Add("@LimitUsed", SqlDbType.Float).Value = fltLimitUsed;
-            cmd.Parameters.Add("@HistoryUID", SqlDbType.VarChar).Value = dtTransactionHiustory.Rows[0]["HistoryUID"]; ;
-            cmd.Parameters.Add("@TransactionTable", SqlDbType.Structured).Value = dtTransactionHiustory;
-            cmd.Parameters.Add("@IssueTable", SqlDbType.Structured).Value = dtIssue;
-            SqlParameter outputIdParam = new SqlParameter("@Status", SqlDbType.Bit)
+            if (_sqlConnection.State == ConnectionState.Closed)
             {
-                Direction = ParameterDirection.Output
-            };
-            cmd.Parameters.Add(outputIdParam);
-            cmd.ExecuteNonQuery();
-            if((bool.Parse(outputIdParam.Value.ToString())))
-            {
-                return true;
+                _sqlConnection.Open();
             }
-            else
+            try
             {
-                throw new ApplicationException("Error while issuing book");
+                SqlCommand cmd = new SqlCommand("up_usr_Execute_Regular_Issue", _sqlConnection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@CustomerID", SqlDbType.VarChar).Value = dtTransactionHiustory.Rows[0]["CustomerID"];
+                cmd.Parameters.Add("@Title", SqlDbType.VarChar).Value = dtTransactionHiustory.Rows[0]["Title"];
+                cmd.Parameters.Add("@Author", SqlDbType.VarChar).Value = dtTransactionHiustory.Rows[0]["Author"];
+                cmd.Parameters.Add("@Edition", SqlDbType.VarChar).Value = dtTransactionHiustory.Rows[0]["Edition"];
+                cmd.Parameters.Add("@Publisher", SqlDbType.VarChar).Value = dtTransactionHiustory.Rows[0]["Publisher"];
+                cmd.Parameters.Add("@price", SqlDbType.Float).Value = float.Parse(dtIssue.Rows[0]["BookPrice"].ToString());
+                cmd.Parameters.Add("@BookCount", SqlDbType.Int).Value = 1;
+                cmd.Parameters.Add("@issueDate", SqlDbType.DateTime).Value = dtTransactionHiustory.Rows[0]["IssueDate"]; ;
+                cmd.Parameters.Add("@AdvanceAmount", SqlDbType.Float).Value = fltAdvanceAmount;
+                cmd.Parameters.Add("@BalanceAmount", SqlDbType.Float).Value = fltBalanceAmount;
+                cmd.Parameters.Add("@LimitUsed", SqlDbType.Float).Value = fltLimitUsed;
+                cmd.Parameters.Add("@HistoryUID", SqlDbType.VarChar).Value = dtTransactionHiustory.Rows[0]["HistoryUID"]; ;
+                cmd.Parameters.Add("@TransactionTable", SqlDbType.Structured).Value = dtTransactionHiustory;
+                cmd.Parameters.Add("@IssueTable", SqlDbType.Structured).Value = dtIssue;
+                SqlParameter outputIdParam = new SqlParameter("@Status", SqlDbType.Bit)
+                {
+                    Direction = ParameterDirection.Output
+                };
+                cmd.Parameters.Add(outputIdParam);
+                cmd.ExecuteNonQuery();
+                if ((bool.Parse(outputIdParam.Value.ToString())))
+                {
+                    return true;
+                }
+                else
+                {
+                    throw new ApplicationException("Error while issuing book");
+                }
+            }
+            catch (SqlException SqlEx)
+            {
+                throw new ApplicationException(SqlEx.ToString());
+            }
+            catch (Exception Ex)
+            {
+                throw new ApplicationException(Ex.ToString());
+            }
+            finally
+            {
+                if (_sqlConnection.State == ConnectionState.Open)
+                {
+                   _sqlConnection.Close();
+                }
+            }
+
+        }
+
+
+        internal bool PerformRegularIssueNonRentalProcess(DataTable dtTransactionHiustory, DataTable dtIssue)
+        {
+            if (_sqlConnection.State == ConnectionState.Closed)
+            {
+                _sqlConnection.Open();
+            }
+            try
+            {
+                SqlCommand cmd = new SqlCommand("up_usr_Execute_Regular_Issue_FOr_NonRental", _sqlConnection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@CustomerID", SqlDbType.VarChar).Value = dtTransactionHiustory.Rows[0]["CustomerID"];
+                cmd.Parameters.Add("@Title", SqlDbType.VarChar).Value = dtTransactionHiustory.Rows[0]["Title"];
+                cmd.Parameters.Add("@Author", SqlDbType.VarChar).Value = dtTransactionHiustory.Rows[0]["Author"];
+                cmd.Parameters.Add("@Edition", SqlDbType.VarChar).Value = dtTransactionHiustory.Rows[0]["Edition"];
+                cmd.Parameters.Add("@Publisher", SqlDbType.VarChar).Value = dtTransactionHiustory.Rows[0]["Publisher"];
+                cmd.Parameters.Add("@price", SqlDbType.Float).Value = float.Parse(dtIssue.Rows[0]["BookPrice"].ToString());
+                cmd.Parameters.Add("@BookCount", SqlDbType.Int).Value = 1;
+                cmd.Parameters.Add("@issueDate", SqlDbType.DateTime).Value = dtTransactionHiustory.Rows[0]["IssueDate"]; ;
+                cmd.Parameters.Add("@HistoryUID", SqlDbType.VarChar).Value = dtTransactionHiustory.Rows[0]["HistoryUID"]; ;
+                cmd.Parameters.Add("@TransactionTable", SqlDbType.Structured).Value = dtTransactionHiustory;
+                cmd.Parameters.Add("@IssueTable", SqlDbType.Structured).Value = dtIssue;
+                SqlParameter outputIdParam = new SqlParameter("@Status", SqlDbType.Bit)
+                {
+                    Direction = ParameterDirection.Output
+                };
+                cmd.Parameters.Add(outputIdParam);
+                cmd.ExecuteNonQuery();
+                if ((bool.Parse(outputIdParam.Value.ToString())))
+                {
+                    return true;
+                }
+                else
+                {
+                    throw new ApplicationException("Error while issuing book");
+                }
+            }
+            catch (SqlException SqlEx)
+            {
+                throw new ApplicationException(SqlEx.ToString());
+            }
+            finally
+            {
+                if (_sqlConnection.State == ConnectionState.Open)
+                {
+                    _sqlConnection.Close();
+                }
             }
         }
 
@@ -1301,6 +1383,36 @@ namespace LibraryDesign_frontEndUI
                 _sqlConnection.Close();
             }
            
+        }
+
+        internal void UpdateCustomerForNonRentalIssue(string strCustomerID, int intBookCount, float fltLimitUsed)
+        {
+            if (_sqlConnection.State == ConnectionState.Closed)
+            {
+                _sqlConnection.Open();
+            }
+            try
+            {
+                SqlCommand cmd = new SqlCommand("up_usr_Update_CustomerDetailsOnNonRentalIssue", _sqlConnection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@CustomerID", SqlDbType.VarChar).Value = strCustomerID;
+                cmd.Parameters.Add("@BookCount", SqlDbType.Int).Value = intBookCount;
+                cmd.Parameters.Add("@LimitUsed", SqlDbType.Float).Value = fltLimitUsed;
+                cmd.ExecuteNonQuery();
+                _sqlConnection.Close();
+            }
+            catch (SqlException ex)
+            {
+                throw new ApplicationException("Error occured while Updating customer.\nError  :" + ex);
+            }
+            finally
+            {
+                if (_sqlConnection.State == ConnectionState.Open)
+                {
+                    _sqlConnection.Close();
+                }
+            }
+
         }
     }
 }

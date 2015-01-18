@@ -25,6 +25,7 @@ namespace LibraryDesign_frontEndUI
         public frmMultiIssue(string[] strElements,Form refToParent)
         {
             InitializeComponent();
+            cmbMonth.SelectedIndex = 0;
             _dtSelectedStock.Clear();
             lblCustID.Text = strElements[0];
             lblCustomerName.Text = strElements[1];
@@ -63,10 +64,13 @@ namespace LibraryDesign_frontEndUI
                _dtAlreadyIssuedBooks.Clear();
                 BusinessLogic BLgc = new BusinessLogic();
                 BLgc.GetIssueDetails(_dtAlreadyIssuedBooks, lblCustID.Text);
-                if (_dtAlreadyIssuedBooks.Rows.Count > 0 && lblCustomerType.Text == "Rental")
+                if (_dtAlreadyIssuedBooks.Rows.Count > 0)
                 {
                     dgvStudentIssuedBooks.DataSource =_dtAlreadyIssuedBooks;
-                    lblRecieptNumber.Text = _dtAlreadyIssuedBooks[0]["RecieptNumber"].ToString();
+                    if (lblCustomerType.Text == "Rental")
+                    {
+                        lblRecieptNumber.Text = _dtAlreadyIssuedBooks[0]["RecieptNumber"].ToString();
+                    }
                 }
                 else
                 {
@@ -119,6 +123,11 @@ namespace LibraryDesign_frontEndUI
         {
             try
             {
+                if (cmbMonth.SelectedItem.ToString() == "--SELECT--")
+                {
+                    MessageBox.Show("Please select the return month and proceed", "Return Month");
+                    return;
+                }
                 if (dgvStudentBooks.RowCount == 0)
                 {
                     MessageBox.Show("Please select the book(s) to issue.", "Error");
@@ -145,109 +154,24 @@ namespace LibraryDesign_frontEndUI
 
                             if (!_blnCancelledFromPreview)
                             {
-
-
-
-
-                                #region [Construct History Table]
-
-                                //BLSSchema.ctTransactionHistoryDataTable dtTransactionHistory = new BLSSchema.ctTransactionHistoryDataTable();
-
-                                //BLSSchema.ctTransactionHistoryRow row = dtTransactionHistory.NewctTransactionHistoryRow();
-
-                                //row.HistoryUID = id.ToString();
-
-                                //row.HistoryDate = row.IssueDate = DateTime.Now.ToString("yyyy-MM-dd").Substring(0, 10);
-
-                                //row.ReturnDate = DateTime.Now.AddMonths(_intMemberShipPeriod).ToString("yyyy-MM-dd").Substring(0, 10);
-
-                                //row.Type = "ISU";                           
-
-                                //row.CheckNumber = "";                            
-
-                                //row.CustomerID = txtID.Text;
-
-                                //fltTotalAmount = int.Parse(txtBookCount.Text) * float.Parse(txtBookPrice.Text);
-
-                                //row.Title = txtSelectedTitle.Text;
-
-                                //row.Author = txtSelectedAuthor.Text;
-
-                                //row.Edition = txtSelectedEdition.Text;
-
-                                //row.PurchasePrice = float.Parse(txtPurchasedPrice.Text);
-
-                                //row.AmountIn = fltTotalAmount.ToString();
-
-                                //row.AmountOut = "0";
-
-                                //row.RecieptNumber = "";
-
-                                //dtTransactionHistory.Rows.Add(row);
-
-                                //DataTable dtNewTransHistry = GetRawDataTable(dtTransactionHistory);
-
-                                #endregion
-
-                                #region [Construct Issue Table]
-
-                                //BLSSchema.ctIssueDataTable dtIssue = new BLSSchema.ctIssueDataTable();
-
-                                //BLSSchema.ctIssueRow IssueRow = dtIssue.NewctIssueRow();
-
-                                //IssueRow.CustomerID = txtID.Text;
-
-                                //IssueRow.Title = txtSelectedTitle.Text;
-
-                                //IssueRow.Author = txtSelectedAuthor.Text;
-
-                                //IssueRow.Edition = txtSelectedEdition.Text;
-
-                                //IssueRow.IssueDate = DateTime.Now.ToString("yyyy-MM-dd").Substring(0, 10);
-
-                                //IssueRow.BookCount = txtBookCount.Text;
-
-                                //IssueRow.BookPrice = txtBookPrice.Text;
-
-                                //IssueRow.RecieptNumber = "";
-
-                                //IssueRow.Publisher = txtSelectedPublisher.Text;
-
-                                //IssueRow.HistoryUID = id.ToString();
-
-                                //IssueRow.IssueType = Program.MainObj.GetCustomerType(txtMemberShipType.Text);
-
-                                //IssueRow.Returndate = DateTime.Now.AddMonths(_intMemberShipPeriod).ToString("yyyy-MM-dd").Substring(0, 10);
-
-                                //IssueRow.EarlyIssue = false;
-
-                                //dtIssue.Rows.Add(IssueRow);
-
-                                //DataTable dtNewIssue = GetRawDataTable(dtIssue);
-
-                                #endregion
-
-                                /**********************************************************************************
-                                 * Modified By : Shankar
-                                 * Changed int CustomerID to string CustomerID
-                                **********************************************************************************/
-                                //BL.PerformRegularIssueProcess(id.ToString(), txtID.Text, txtSelectedTitle.Text, txtSelectedAuthor.Text, txtSelectedEdition.Text,
-                                // float.Parse(txtBookPrice.Text), int.Parse(txtBookCount.Text), DateTime.Now,
-                                // float.Parse(txtAdvance.Text), float.Parse(txtBalance.Text), -1, dtNewTransHistry, dtNewIssue);
-
-                                //MessageBox.Show("Book(s) Issued", "Done.");
-
-                                //_blnCheckForMaxLimit = false;
-
-                                //_refToParent.Search(_refToParent._strLastQuery);
-
-                                //Close();
-
-
+                                IssueRentalBooks();                               
                             }
                         }
-                    }
                         #endregion
+                        #region [Issue book for Non-rental customer]
+                        else if (_strMemberShipType == "N")//Its Non rental
+                        {
+                            IssueNonRentalBooks();
+                        }
+
+                        #endregion
+                    }
+                       
+
+
+                    
+
+
 
                     #region [Issue book for OTHER type customer]
                     else if (_strMemberShipType == "Other")//Its Other(Special category)
@@ -483,7 +407,7 @@ namespace LibraryDesign_frontEndUI
                     }
                         #endregion                
             
-                }
+                    }
             }
             catch (Exception ex)
             {
@@ -496,143 +420,295 @@ namespace LibraryDesign_frontEndUI
 
         private void IssueRentalBooks()
         {
-            BusinessLogic BL = new BusinessLogic();
-            string strReturnDate = DateTime.Now.ToString("yyyy-MM-dd").Substring(0, 10);
-            float fltadvance = 0;
-            float fltBalance = 0;
-            float fltPrice = 0;
-            string strUID = string.Empty;
-            bool blnIssuestatus = false;
-            int intRowCount = _dtSelectedStock.Rows.Count;
-            if (_dtAlreadyIssuedBooks.Rows.Count > 0)
+            try
             {
-                _strReceiptNumber = _dtSelectedStock[0]["RecieptNumber"].ToString();
-            }
-            else
-            {
-                _strReceiptNumber = BL.GetReceiptNumber();
-            }
-
-
-            for (int intI = 0; intI < intRowCount; intI++)
-            {
-                if (intI == intRowCount - 1)
+                BusinessLogic BL = new BusinessLogic();
+                string strReturnDate = (Program.MainObj.GetReturnDate(cmbMonth.SelectedIndex)).ToString("yyyy-MM-dd").Substring(0, 10);
+                float fltadvance = 0;
+                float fltBalance = 0;
+                float fltPrice = 0;
+                string strUID = string.Empty;
+                bool blnIssuestatus = false;
+                int intRowCount = _dtSelectedStock.Rows.Count;
+                if (_dtAlreadyIssuedBooks.Rows.Count > 0)
                 {
-                    fltadvance = float.Parse(lblAdvance.Text);
-                    fltBalance = float.Parse(lblBalanceAmount.Text);
+                    _strReceiptNumber = _dtAlreadyIssuedBooks[0]["RecieptNumber"].ToString();
+                }
+                else
+                {
+                    _strReceiptNumber = BL.GetReceiptNumber();
                 }
 
-                fltPrice = float.Parse(_dtSelectedStock[intI]["BookPrice"].ToString());
-                strUID = System.Guid.NewGuid().ToString();
 
-                #region [Construct History Table]
-
-                BLSSchema.ctTransactionHistoryDataTable dtTransactionHistory = new BLSSchema.ctTransactionHistoryDataTable();
-
-                BLSSchema.ctTransactionHistoryRow row = dtTransactionHistory.NewctTransactionHistoryRow();
-
-                row.HistoryUID = strUID;
-
-                row.HistoryDate = row.IssueDate = DateTime.Now.ToString("yyyy-MM-dd").Substring(0, 10);
-
-                //row.ReturnDate = DateTime.Now.AddMonths(_intMemberShipPeriod).ToString("yyyy-MM-dd").Substring(0, 10);
-
-
-                row.ReturnDate = strReturnDate;
-
-                row.Type = _strMemberShipType;                           
-
-                row.CheckNumber = "";                            
-
-                row.CustomerID = lblCustID.Text;
-
-                row.Title = _dtSelectedStock[intI]["Title"].ToString();
-
-                row.Author = _dtSelectedStock[intI]["Author"].ToString();
-
-                row.Edition = _dtSelectedStock[intI]["Edition"].ToString();
-
-                row.Publisher = _dtSelectedStock[intI]["Publisher"].ToString();
-
-                row.PurchasePrice = fltPrice;
-
-                row.AmountIn = fltPrice.ToString();
-
-                row.AmountOut = "0";
-
-                row.RecieptNumber = _strReceiptNumber;
-
-                dtTransactionHistory.Rows.Add(row);
-
-                DataTable dtNewTransHistry = Program.MainObj.GetRawDataTable(dtTransactionHistory);
-
-                #endregion
-
-                #region [Construct Issue Table]
-
-                BLSSchema.ctIssueDataTable dtIssue = new BLSSchema.ctIssueDataTable();
-
-                BLSSchema.ctIssueRow IssueRow = dtIssue.NewctIssueRow();
-
-                IssueRow.Title = _dtSelectedStock[intI]["Title"].ToString();
-
-                IssueRow.Author = _dtSelectedStock[intI]["Author"].ToString();
-
-                IssueRow.Edition = _dtSelectedStock[intI]["Edition"].ToString();
-
-                IssueRow.Publisher = _dtSelectedStock[intI]["Publisher"].ToString();                
-
-                IssueRow.IssueDate = DateTime.Now.ToString("yyyy-MM-dd").Substring(0, 10);
-
-                IssueRow.BookCount = "1";
-
-                IssueRow.BookPrice = fltPrice.ToString();
-
-                IssueRow.RecieptNumber = _strReceiptNumber;
-
-                IssueRow.HistoryUID = strUID;
-
-                IssueRow.IssueType = _strMemberShipType;
-
-                IssueRow.Returndate = strReturnDate;
-
-                IssueRow.EarlyIssue = false;
-
-                dtIssue.Rows.Add(IssueRow);
-
-                DataTable dtNewIssue = Program.MainObj.GetRawDataTable(dtIssue);
-
-                #endregion
-
-                /**********************************************************************************
-                 * Modified By : Shankar
-                 * Changed int CustomerID to string CustomerID
-                **********************************************************************************/
-            //    if (BL.PerformRegularIssueProcess(float.Parse(txtAdvance.Text), float.Parse(txtBalance.Text),
-            //        -1, dtNewTransHistry, dtNewIssue))
+                for (int intI = 0; intI < intRowCount; intI++)
                 {
-                    blnIssuestatus = true;                   
+                    if (intI == intRowCount - 1)
+                    {
+                        fltadvance = float.Parse(lblAdvanceAmount.Text);
+                        fltBalance = float.Parse(lblBalanceAmount.Text);
+                    }
+
+                    fltPrice = float.Parse(_dtSelectedStock[intI]["OriginalPrice"].ToString());
+                    strUID = System.Guid.NewGuid().ToString();
+
+                    #region [Construct History Table]
+
+                    BLSSchema.ctTransactionHistoryDataTable dtTransactionHistory = new BLSSchema.ctTransactionHistoryDataTable();
+
+                    BLSSchema.ctTransactionHistoryRow row = dtTransactionHistory.NewctTransactionHistoryRow();
+
+                    row.HistoryUID = strUID;
+
+                    row.HistoryDate = row.IssueDate = DateTime.Now.ToString("yyyy-MM-dd").Substring(0, 10);
+
+                    //row.ReturnDate = DateTime.Now.AddMonths(_intMemberShipPeriod).ToString("yyyy-MM-dd").Substring(0, 10);
+
+
+                    row.ReturnDate = strReturnDate;
+
+                    row.Type = _strMemberShipType;
+
+                    row.CheckNumber = "";
+
+                    row.CustomerID = lblCustID.Text;
+
+                    row.Title = _dtSelectedStock[intI]["Title"].ToString();
+
+                    row.Author = _dtSelectedStock[intI]["Author"].ToString();
+
+                    row.Edition = _dtSelectedStock[intI]["Edition"].ToString();
+
+                    row.Publisher = _dtSelectedStock[intI]["Publisher"].ToString();
+
+                    row.PurchasePrice = fltPrice;
+
+                    row.AmountIn = fltPrice.ToString();
+
+                    row.AmountOut = "0";
+
+                    row.RecieptNumber = _strReceiptNumber;
+
+                    dtTransactionHistory.Rows.Add(row);
+
+                    DataTable dtNewTransHistry = Program.MainObj.GetRawDataTable(dtTransactionHistory);
+
+                    #endregion
+
+                    #region [Construct Issue Table]
+
+                    BLSSchema.ctIssueDataTable dtIssue = new BLSSchema.ctIssueDataTable();
+
+                    BLSSchema.ctIssueRow IssueRow = dtIssue.NewctIssueRow();
+
+                    IssueRow.CustomerID = lblCustID.Text;
+
+                    IssueRow.Title = _dtSelectedStock[intI]["Title"].ToString();
+
+                    IssueRow.Author = _dtSelectedStock[intI]["Author"].ToString();
+
+                    IssueRow.Edition = _dtSelectedStock[intI]["Edition"].ToString();
+
+                    IssueRow.Publisher = _dtSelectedStock[intI]["Publisher"].ToString();
+
+                    IssueRow.IssueDate = DateTime.Now.ToString("yyyy-MM-dd").Substring(0, 10);
+
+                    IssueRow.BookCount = "1";
+
+                    IssueRow.BookPrice = fltPrice.ToString();
+
+                    IssueRow.RecieptNumber = _strReceiptNumber;
+
+                    IssueRow.HistoryUID = strUID;
+
+                    IssueRow.IssueType = _strMemberShipType;
+
+                    IssueRow.Returndate = strReturnDate;
+
+                    IssueRow.EarlyIssue = false;
+
+                    dtIssue.Rows.Add(IssueRow);
+
+                    DataTable dtNewIssue = Program.MainObj.GetRawDataTable(dtIssue);
+
+                    #endregion
+
+                    if (BL.PerformRegularIssueProcess(fltadvance, fltBalance,
+                       -1, dtNewTransHistry, dtNewIssue))
+                    {
+                        blnIssuestatus = true;
+                    }
+                    else
+                    {
+                        blnIssuestatus = false;
+                    }
+
                 }
-               /* else
+
+                if (blnIssuestatus)
                 {
-                    blnIssuestatus = false;
+                    _dtSelectedStock.Rows.Clear();
+
+                    Search();
+
+                    _refToParent.Search(_refToParent._strLastQuery);
+
+                    MessageBox.Show("Issue Process Completed", "Success");
                 }
-                * */
+                else
+                {
+                    MessageBox.Show("Error while issuing one or more books.\nPlease repeat the return process", "Error");
+                }
             }
-
-            if (blnIssuestatus)
+            catch (Exception ex)
             {
-                _dtSelectedStock.Rows.Clear();
+                throw new ApplicationException(ex.ToString());
 
-                Search();
-
-                _refToParent.Search(_refToParent._strLastQuery);
-
-                MessageBox.Show("Issue Process Completed", "Success");
             }
-            else
+        }
+
+        private void IssueNonRentalBooks()
+        {
+            try
             {
-                MessageBox.Show("Error while issuing one or more books.\nPlease repeat the return process", "Error");
+                BusinessLogic BL = new BusinessLogic();
+                string strReturnDate = (Program.MainObj.GetReturnDate(cmbMonth.SelectedIndex)).ToString("yyyy-MM-dd").Substring(0, 10);                
+                float fltPrice = 0;
+                string strUID = string.Empty;
+                bool blnIssuestatus = false;
+                int intRowCount = _dtSelectedStock.Rows.Count;
+                if (_dtAlreadyIssuedBooks.Rows.Count > 0)
+                {
+                    _strReceiptNumber = _dtAlreadyIssuedBooks[0]["RecieptNumber"].ToString();
+                }
+                else
+                {
+                    _strReceiptNumber = BL.GetReceiptNumber();
+                }
+
+
+                for (int intI = 0; intI < intRowCount; intI++)
+                {
+                    
+                    fltPrice = float.Parse(_dtSelectedStock[intI]["OriginalPrice"].ToString());
+                    strUID = System.Guid.NewGuid().ToString();
+
+                    #region [Construct History Table]
+
+                    BLSSchema.ctTransactionHistoryDataTable dtTransactionHistory = new BLSSchema.ctTransactionHistoryDataTable();
+
+                    BLSSchema.ctTransactionHistoryRow row = dtTransactionHistory.NewctTransactionHistoryRow();
+
+                    row.HistoryUID = strUID;
+
+                    row.HistoryDate = row.IssueDate = DateTime.Now.ToString("yyyy-MM-dd").Substring(0, 10);
+
+                    //row.ReturnDate = DateTime.Now.AddMonths(_intMemberShipPeriod).ToString("yyyy-MM-dd").Substring(0, 10);
+
+
+                    row.ReturnDate = strReturnDate;
+
+                    row.Type = _strMemberShipType;
+
+                    row.CheckNumber = "";
+
+                    row.CustomerID = lblCustID.Text;
+
+                    row.Title = _dtSelectedStock[intI]["Title"].ToString();
+
+                    row.Author = _dtSelectedStock[intI]["Author"].ToString();
+
+                    row.Edition = _dtSelectedStock[intI]["Edition"].ToString();
+
+                    row.Publisher = _dtSelectedStock[intI]["Publisher"].ToString();
+
+                    row.PurchasePrice = fltPrice;
+
+                    row.AmountIn = fltPrice.ToString();
+
+                    row.AmountOut = "0";
+
+                    row.RecieptNumber = _strReceiptNumber;
+
+                    dtTransactionHistory.Rows.Add(row);
+
+                    DataTable dtNewTransHistry = Program.MainObj.GetRawDataTable(dtTransactionHistory);
+
+                    #endregion
+
+                    #region [Construct Issue Table]
+
+                    BLSSchema.ctIssueDataTable dtIssue = new BLSSchema.ctIssueDataTable();
+
+                    BLSSchema.ctIssueRow IssueRow = dtIssue.NewctIssueRow();
+
+                    IssueRow.CustomerID = lblCustID.Text;
+
+                    IssueRow.Title = _dtSelectedStock[intI]["Title"].ToString();
+
+                    IssueRow.Author = _dtSelectedStock[intI]["Author"].ToString();
+
+                    IssueRow.Edition = _dtSelectedStock[intI]["Edition"].ToString();
+
+                    IssueRow.Publisher = _dtSelectedStock[intI]["Publisher"].ToString();
+
+                    IssueRow.IssueDate = DateTime.Now.ToString("yyyy-MM-dd").Substring(0, 10);
+
+                    IssueRow.BookCount = "1";
+
+                    IssueRow.BookPrice = fltPrice.ToString();
+
+                    IssueRow.RecieptNumber = _strReceiptNumber;
+
+                    IssueRow.HistoryUID = strUID;
+
+                    IssueRow.IssueType = _strMemberShipType;
+
+                    IssueRow.Returndate = strReturnDate;
+
+                    IssueRow.EarlyIssue = false;
+
+                    dtIssue.Rows.Add(IssueRow);
+
+                    DataTable dtNewIssue = Program.MainObj.GetRawDataTable(dtIssue);
+
+                    #endregion
+
+                    if (BL.PerformRegularIssueNonRentalProcess(dtNewTransHistry, dtNewIssue))
+                    {                        
+                        blnIssuestatus = true;
+                    }
+                    else
+                    {
+                        blnIssuestatus = false;
+                    }
+
+                }
+
+                if (blnIssuestatus)
+                {
+
+                    BL.UpdateCustomerForNonRentalIssue(lblCustID.Text, intRowCount, float.Parse(lblRecieptNumber.Text));
+                    lblBalanceAmount.Text = lblRecieptNumber.Text;
+
+                    _dtSelectedStock.Rows.Clear();
+
+                    Search();
+
+                    _refToParent.Search(_refToParent._strLastQuery);
+
+                    
+
+                    MessageBox.Show("Issue Process Completed", "Success");
+                }
+                else
+                {
+                    MessageBox.Show("Error while issuing one or more books.\nPlease repeat the return process", "Error");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(ex.ToString());
+
             }
         }
         
@@ -680,6 +756,11 @@ namespace LibraryDesign_frontEndUI
         {
             dgvStudentBooks.DataSource = _dtSelectedStock;
             dgvStudentBooks.Refresh();
+        }
+
+        private void btnPrint_Click(object sender, EventArgs e)
+        {
+           
         }
 
      

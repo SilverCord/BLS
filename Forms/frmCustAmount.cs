@@ -14,13 +14,11 @@ namespace LibraryDesign_frontEndUI.Forms
     {
         frmIssuePreview _frmParentref = null;
 
-        public frmCustAmount(Form frmParentref, string strType)
+        public frmCustAmount(frmIssuePreview frmParentref, string strType,float fltAmountPayable)
         {
             InitializeComponent();
-            if (strType == "Issue")
-            {
-                _frmParentref = (frmIssuePreview)frmParentref;
-            }           
+            _frmParentref = frmParentref;
+            txtAmountPayable.Text = fltAmountPayable.ToString();                      
         }
 
         private void btnOK_Click(object sender, EventArgs e)

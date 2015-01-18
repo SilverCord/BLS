@@ -1,4 +1,5 @@
-﻿using LibraryDesign_frontEndUI.Library;
+﻿using LibraryDesign_frontEndUI.Forms;
+using LibraryDesign_frontEndUI.Library;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,7 +13,7 @@ namespace LibraryDesign_frontEndUI
 {
     public partial class frmIssuePreview : Form
     {
-        frmIssueBooks _fmrParentRef = null;
+        //frmIssueBooks _fmrParentRef = null;
 
         frmMultiIssue _fmrParentRefrnce = null;
 
@@ -205,7 +206,8 @@ namespace LibraryDesign_frontEndUI
             {
                 if (float.Parse(txtTotalAmountPayable.Text) > 0)
                 {
-                    frmAmount frmAmt = new frmAmount(this,"Issue");
+                    //frmAmount frmAmt = new frmAmount(this,"Issue");
+                    frmCustAmount frmAmt = new frmCustAmount(this, "Issue", float.Parse(txtTotalAmountPayable.Text));
                     frmAmt.ShowDialog();
                 }                
                 if (!blnCustomerCanceled)
@@ -214,14 +216,14 @@ namespace LibraryDesign_frontEndUI
                     float fltBalanceAmount = float.Parse(txtTotalAmountPayable.Text) - fltCustomerPaidAmount;
                     if (fltBalanceAmount >= 0)
                     {
-                        _fmrParentRef.txtBalance.Text = fltBalanceAmount.ToString();
+                       // _fmrParentRef.txtBalance.Text = fltBalanceAmount.ToString();
                         _fmrParentRefrnce.lblBalanceAmount.Text = fltBalanceAmount.ToString();
                     }
                     else
                     {
                         fltAdvanceAmount = (float)Math.Abs(decimal.Parse(fltBalanceAmount.ToString()));
                         //_fmrParentRef.txtAdvance.Text = fltAdvanceAmount.ToString();
-                        _fmrParentRef.txtBalance.Text = "0";
+                        //_fmrParentRef.txtBalance.Text = "0";
                         _fmrParentRefrnce.lblAdvanceAmount.Text = "0";
                     }
 
@@ -229,20 +231,21 @@ namespace LibraryDesign_frontEndUI
                     if (fltAdvanceAfterDeduction > 0)
                     {
                         float fltTotalAdvance = fltAdvanceAfterDeduction + fltAdvanceAmount;
-                        _fmrParentRef.txtAdvance.Text = fltTotalAdvance.ToString();
+                       // _fmrParentRef.txtAdvance.Text = fltTotalAdvance.ToString();
                         _fmrParentRefrnce.lblAdvanceAmount.Text = fltTotalAdvance.ToString();
                     }
                     else if (fltAdvanceAmount > 0)
                     {
-                        _fmrParentRef.txtAdvance.Text = fltAdvanceAmount.ToString();
+                        //_fmrParentRef.txtAdvance.Text = fltAdvanceAmount.ToString();
                         _fmrParentRefrnce.lblAdvanceAmount.Text= fltAdvanceAmount.ToString();
                     }
                     else
                     {
-                        _fmrParentRef.txtAdvance.Text = "0";
+                        //_fmrParentRef.txtAdvance.Text = "0";
                         _fmrParentRefrnce.lblAdvanceAmount.Text = "0";
                     }
-                    _fmrParentRef._blnCancelledFromPreview = false;
+                    //_fmrParentRef._blnCancelledFromPreview = false;
+                    _fmrParentRefrnce._blnCancelledFromPreview = false;
                     Close();
                 }
                 

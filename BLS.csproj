@@ -107,10 +107,10 @@
       <DependentUpon>BLSSchema.xsd</DependentUpon>
     </Compile>
     <Compile Include="BusinessLogic.cs" />
-    <Compile Include="ChooseStockItem.cs">
+    <Compile Include="Forms\ChooseStockItem.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ChooseStockItem.Designer.cs">
+    <Compile Include="Forms\ChooseStockItem.Designer.cs">
       <DependentUpon>ChooseStockItem.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmAddStock.cs">
@@ -271,7 +271,7 @@
     <Compile Include="Library\Utility.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="ChooseStockItem.resx">
+    <EmbeddedResource Include="Forms\ChooseStockItem.resx">
       <DependentUpon>ChooseStockItem.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmAddStock.resx">
@@ -411,7 +411,7 @@
     <Content Include="BLSFullPackage\BLS-Release\LibraryDesign_frontEndUI.vshost.exe" />
     <Content Include="BLSFullPackage\BLS-Release\SmsClient.dll" />
     <Content Include="BLSFullPackage\DBScript\BLSFullScript.sql" />
-    <Content Include="DBScripts\BLSFull.Sql" />
+    <Content Include="DBScripts\BLS.sql" />
     <Content Include="DLLs\ASPSnippets.SmsAPI.dll" />
     <Content Include="DLLs\Microsoft.SqlServer.ConnectionInfo.dll" />
     <Content Include="DLLs\Microsoft.SqlServer.Management.Sdk.Sfc.dll" />

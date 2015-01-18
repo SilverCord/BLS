@@ -285,7 +285,7 @@ namespace LibraryDesign_frontEndUI
                             else
                             {
                                 //Delete the row
-                                _BSchema.ctStockSearch.Rows.RemoveAt(e.RowIndex);                               
+                                _BSchema.ctStockSearch.Rows.RemoveAt(e.RowIndex);
                                 dgvStockSearchResult.DataSource = _BSchema.ctStockSearch;
                                 dgvStockSearchResult.Refresh();
                             }
@@ -302,11 +302,27 @@ namespace LibraryDesign_frontEndUI
                             {
                                 return;
                             }
-                            //everything OK then add;  
+
                             stockSearchRow.Count = 1;
                             _frmParentRef._dtSelectedStock.ImportRow(stockSearchRow);
-                            _BSchema.ctStockSearch.RemovectStockSearchRow(ctStockSearch[e.RowIndex]);
                             _CurrentLimit = _CurrentLimit + float.Parse(stockSearchRow.OriginalPrice);
+                            if (int.Parse(ctStockSearch[e.RowIndex].Count.ToString()) > 1)
+                            {
+                                //decrement the count
+                                _BSchema.ctStockSearch[e.RowIndex].Count = int.Parse(ctStockSearch[e.RowIndex].Count.ToString()) - 1;
+                                _BSchema.ctStockSearch.AcceptChanges();
+                                dgvStockSearchResult.DataSource = _BSchema.ctStockSearch;
+                                dgvStockSearchResult.Refresh();
+                            }
+                            else
+                            {
+                                //Delete the row
+                                _BSchema.ctStockSearch.Rows.RemoveAt(e.RowIndex);
+                                dgvStockSearchResult.DataSource = _BSchema.ctStockSearch;
+
+                                //everything OK then add;                           
+                                //_BSchema.ctStockSearch.RemovectStockSearchRow(ctStockSearch[e.RowIndex]);                                 
+                            }
                             dgvSelectedBooks.DataSource = _frmParentRef._dtSelectedStock;
                             dgvStockSearchResult.DataSource = _BSchema.ctStockSearch;
                             dgvStockSearchResult.Refresh();
@@ -340,16 +356,28 @@ namespace LibraryDesign_frontEndUI
 
         private bool CheckForDuplicate(BLSSchema.ctStockSearchRow stockSearchRow)
         {
-            foreach (DataRow dr in _ctSelectedStockItems.Rows)
-            {
-                var array1 = stockSearchRow.ItemArray;
-                var array2 = dr.ItemArray;
+            //foreach (DataRow dr in _frmParentRef._dtSelectedStock.Rows)
+            //{
+            //    var array1 = stockSearchRow.ItemArray;
+            //    var array2 = dr.ItemArray;
 
-                if (array1.SequenceEqual(array2))
-                {
-                    return true;
-                }
+            //    if (array1.SequenceEqual(array2))
+            //    {
+            //        return true;
+            //    }
+            //}
+
+            string strFilter = "Title = '" + stockSearchRow.Title
+               + "' AND Author ='" + stockSearchRow.Author + "' AND Edition ='" + stockSearchRow.Edition
+               + "' AND Publisher ='" + stockSearchRow.Publisher + "' AND OriginalPrice ='"
+               + stockSearchRow.OriginalPrice + "'";
+            DataRow[] drCheck = _frmParentRef._dtSelectedStock.Select(strFilter);
+            if (drCheck != null && drCheck.Length > 0)
+            {
+                return true;
             }
+
+
             string strFilterCondition = "Title = '" + stockSearchRow.Title
                 + "' AND Author ='" + stockSearchRow.Author + "' AND Edition ='" + stockSearchRow.Edition
                 + "' AND Publisher ='" + stockSearchRow.Publisher + "' AND BookPrice ='"
